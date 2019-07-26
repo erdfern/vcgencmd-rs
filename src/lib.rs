@@ -108,7 +108,7 @@ pub fn get_mem(src: Src) -> Result<isize, ExecutionError> {
     let output = exec_command(Cmd::GetMem, Some(src)).map_err(ExecutionError::Popen)?;
     let mem = parsers::mem(&output)
         .parse::<isize>()
-        .map_error(ExecutionError::ParseInt)?;
+        .map_err(ExecutionError::ParseInt)?;
 
     Ok(mem)
 }
