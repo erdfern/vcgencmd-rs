@@ -1,15 +1,21 @@
 fn trim_before_equals(input: &str) -> String {
-    input.split("=").collect::<Vec<_>>()[1].to_owned()
+    input.split("=").collect::<Vec<_>>()[1].trim().to_owned()
 }
 
 pub fn temp(input: &str) -> String {
-    let parsed = trim_before_equals(input).trim_end_matches("'C").to_owned();
+    let parsed = trim_before_equals(input)
+        .trim_end_matches("'C")
+        .trim()
+        .to_owned();
 
     parsed
 }
 
 pub fn volts(input: &str) -> String {
-    let parsed = trim_before_equals(input).trim_end_matches("V").to_owned();
+    let parsed = trim_before_equals(input)
+        .trim_end_matches("V")
+        .trim()
+        .to_owned();
 
     parsed
 }
@@ -19,7 +25,10 @@ pub fn frequency(input: &str) -> String {
 }
 
 pub fn mem(input: &str) -> String {
-    let parsed = trim_before_equals(input).trim_end_matches("M").to_owned();
+    let parsed = trim_before_equals(input)
+        .trim_end_matches("M")
+        .trim()
+        .to_owned();
 
     parsed
 }
