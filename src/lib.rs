@@ -23,13 +23,13 @@ pub enum Args {
 
 /// Execute the given command and capture its std_output
 fn exec_command(command: &str, arg: &str) -> Result<String, PopenError> {
-    let output = Exec::cmd(command)
+    let vcgencmd_output = Exec::cmd("vcgencmd")
         .arg(arg)
         .stdout(Redirection::Pipe)
         .capture()?
         .stdout_str();
 
-    Ok(output)
+    Ok(vcgencmd_output)
 }
 
 fn resolve_arg(arg: Args) -> String {

@@ -1,5 +1,5 @@
 [package]
-name = "vcgencmd-rs"
+name = "vcgencmd"
 version = "0.1.0"
 authors = ["Linus Keiser <linus@keiser.co>"]
 edition = "2018"
