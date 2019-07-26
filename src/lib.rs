@@ -81,7 +81,6 @@ pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError
 pub fn measure_clock(src: Src) -> Result<isize, ExecutionError> {
     let output = exec_command(Cmd::MeasureClock, Some(src)).map_err(ExecutionError::Popen)?;
     let frequency = parsers::frequency(&output)
-        .parse::<isize>()
         .map_err(ExecutionError::ParseInt)?;
 
     Ok(frequency)
@@ -89,9 +88,7 @@ pub fn measure_clock(src: Src) -> Result<isize, ExecutionError> {
 
 pub fn measure_volts(src: Src) -> Result<f64, ExecutionError> {
     let output = exec_command(Cmd::MeasureVolts, Some(src)).map_err(ExecutionError::Popen)?;
-    let volts = parsers::volts(&output)
-        .parse::<f64>()
-        .map_err(ExecutionError::ParseFloat)?;
+    let volts = parsers::volts(&output).map_err(ExecutionError::ParseFloat)?;
 
     Ok(volts)
 }
@@ -99,7 +96,6 @@ pub fn measure_volts(src: Src) -> Result<f64, ExecutionError> {
 pub fn measure_temp() -> Result<f64, ExecutionError> {
     let output = exec_command(Cmd::MeasureTemp, None).map_err(ExecutionError::Popen)?;
     let temperature = parsers::temp(&output)
-        .parse::<f64>()
         .map_err(ExecutionError::ParseFloat)?;
 
     Ok(temperature)
@@ -108,7 +104,6 @@ pub fn measure_temp() -> Result<f64, ExecutionError> {
 pub fn get_mem(src: Src) -> Result<isize, ExecutionError> {
     let output = exec_command(Cmd::GetMem, Some(src)).map_err(ExecutionError::Popen)?;
     let mem = parsers::mem(&output)
-        .parse::<isize>()
         .map_err(ExecutionError::ParseInt)?;
 
     Ok(mem)
