@@ -1,5 +1,7 @@
 //! This crate contains bindings for the RaspberryPi's vcgencmd cli tool
 
+use subprocess::{PopenError, Exec, Redirection};
+
 enum KVoltSources {
     Arm,
     Core,
@@ -13,6 +15,15 @@ enum KVoltSources {
     Vec,
     Hdmi,
     Dpi,
+}
+
+enum Sources {
+    KVoltSources(KVoltSources),
+}
+
+/// Execute the given command and capture its std_output
+pub fn exec_command(command: &str) -> String {
+    Exec::cmd(command).stdout(Redirection::Pipe).capture()?.stdout_str()
 }
 
 #[cfg(test)]
