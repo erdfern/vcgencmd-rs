@@ -4,6 +4,7 @@ license = "MIT"
 version = "0.1.0"
 authors = ["Linus Keiser <linus@keiser.co>"]
 edition = "2018"
+description = "Bindings for Raspberry Pi's vcgencmd utility"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
