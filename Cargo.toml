@@ -1,5 +1,6 @@
 [package]
 name = "vcgencmd"
+license = "MIT"
 version = "0.1.0"
 authors = ["Linus Keiser <linus@keiser.co>"]
 edition = "2018"
