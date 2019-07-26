@@ -2,7 +2,7 @@
 
 use subprocess::{Exec, PopenError, Redirection};
 
-pub enum ClockArgs {
+pub enum ClockSrc {
     Arm,
     Core,
     Dpi,
@@ -17,15 +17,20 @@ pub enum ClockArgs {
     Vec,
 }
 
-pub enum Args {
-    ClockArgs(ClockArgs),
+pub enum Src {
+    ClockSrc(ClockSrc),
+}
+
+pub enum Cmd {
+    MeasureClock,
+    MeasureTemp,
 }
 
 /// Execute the given command and capture its std_output
-fn exec_command(command: &str, arg: &str) -> Result<String, PopenError> {
+fn exec_command(command: Cmd, arg: Src) -> Result<String, PopenError> {
     let vcgencmd_output = Exec::cmd("vcgencmd")
-        .arg(command)
-        .arg(arg)
+        .arg(resolve_command(command))
+        .arg(resolve_src(arg))
         .stdout(Redirection::Pipe)
         .capture()?
         .stdout_str();
@@ -33,28 +38,38 @@ fn exec_command(command: &str, arg: &str) -> Result<String, PopenError> {
     Ok(vcgencmd_output)
 }
 
-fn resolve_arg(arg: Args) -> String {
-    let arg = match arg {
-        Args::ClockArgs(ClockArgs::Arm) => "arm",
-        Args::ClockArgs(ClockArgs::Core) => "core",
-        Args::ClockArgs(ClockArgs::Dpi) => "dpi",
-        Args::ClockArgs(ClockArgs::Emmc) => "emmc",
-        Args::ClockArgs(ClockArgs::H264) => "h264",
-        Args::ClockArgs(ClockArgs::Hdmi) => "hdmi",
-        Args::ClockArgs(ClockArgs::Isp) => "isp",
-        Args::ClockArgs(ClockArgs::Pixel) => "pixel",
-        Args::ClockArgs(ClockArgs::Pwm) => "pwm",
-        Args::ClockArgs(ClockArgs::Uart) => "uart",
-        Args::ClockArgs(ClockArgs::V3d) => "v3d",
-        Args::ClockArgs(ClockArgs::Vec) => "vec",
+fn resolve_command(cmd: Cmd) -> String {
+    let command = match cmd {
+        Cmd::MeasureClock => "measure_clock",
+        Cmd::MeasureTemp => "measure_temp",
     }
-    .to_owned();
+        .to_owned();
 
-    arg
+    command
 }
 
-pub fn measure_clock(arg: Args) -> Result<String, PopenError> {
-    let output = exec_command("measure_clock", &resolve_arg(arg))?;
+fn resolve_src(src: Src) -> String {
+    let source = match src {
+        Src::ClockSrc(ClockSrc::Arm) => "arm",
+        Src::ClockSrc(ClockSrc::Core) => "core",
+        Src::ClockSrc(ClockSrc::Dpi) => "dpi",
+        Src::ClockSrc(ClockSrc::Emmc) => "emmc",
+        Src::ClockSrc(ClockSrc::H264) => "h264",
+        Src::ClockSrc(ClockSrc::Hdmi) => "hdmi",
+        Src::ClockSrc(ClockSrc::Isp) => "isp",
+        Src::ClockSrc(ClockSrc::Pixel) => "pixel",
+        Src::ClockSrc(ClockSrc::Pwm) => "pwm",
+        Src::ClockSrc(ClockSrc::Uart) => "uart",
+        Src::ClockSrc(ClockSrc::V3d) => "v3d",
+        Src::ClockSrc(ClockSrc::Vec) => "vec",
+    }
+        .to_owned();
+
+    source
+}
+
+pub fn measure_clock(src: Src) -> Result<String, PopenError> {
+    let output = exec_command(Cmd::MeasureClock, src)?;
 
     Ok(output)
 }
@@ -72,9 +87,9 @@ mod tests {
     fn exec_command_works() {
         let ls_output = exec_command(
             "measure_clock",
-            &resolve_arg(Args::ClockArgs(ClockArgs::Core)),
+            &resolve_arg(Src::ClockSrc(ClockSrc::Core)),
         )
-        .unwrap();
+            .unwrap();
         dbg!(&ls_output);
         assert!(!ls_output.is_empty());
     }

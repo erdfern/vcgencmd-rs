@@ -1,10 +1,10 @@
 extern crate vcgencmd;
 
-use vcgencmd::ClockArgs;
+use vcgencmd::ClockSrc;
 
 #[test]
 fn test_measure_clock() {
-    let output = vcgencmd::measure_clock(vcgencmd::Args::ClockArgs(ClockArgs::Arm)).unwrap();
+    let output = vcgencmd::measure_clock(vcgencmd::Src::ClockSrc(ClockSrc::Arm)).unwrap();
     dbg!(&output);
     assert!(!output.is_empty());
 }
