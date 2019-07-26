@@ -1,5 +1,3 @@
-use std::string::ParseError;
-
 fn trim_before_equals(input: &str) -> String {
     input.split("=").collect::<Vec<_>>()[1].to_owned()
 }

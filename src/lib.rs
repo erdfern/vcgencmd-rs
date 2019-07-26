@@ -97,9 +97,20 @@ pub fn measure_volts(src: Src) -> Result<f64, ExecutionError> {
 
 pub fn measure_temp() -> Result<f64, ExecutionError> {
     let output = exec_command(Cmd::MeasureTemp, None).map_err(ExecutionError::Popen)?;
-    let temperature = parsers::temp(&output).parse::<f64>().map_err(ExecutionError::ParseFloat)?;
+    let temperature = parsers::temp(&output)
+        .parse::<f64>()
+        .map_err(ExecutionError::ParseFloat)?;
 
     Ok(temperature)
+}
+
+pub fn get_mem(src: Src) -> Result<isize, ExecutionError> {
+    let output = exec_command(Cmd::GetMem, Some(src)).map_err(ExecutionError::Popen)?;
+    let mem = parsers::mem(&output)
+        .parse::<isize>()
+        .map_error(ExecutionError::ParseInt)?;
+
+    Ok(mem)
 }
 
 fn resolve_command(cmd: Cmd) -> String {
@@ -150,10 +161,21 @@ mod tests {
         assert_eq!("measure_clock", resolve_command(Cmd::MeasureClock));
     }
 
+    #[cfg(target_arch = "arm")]
     #[test]
     fn test_exec_command() {
         let output = exec_command(Cmd::MeasureClock, Some(Src::Clock(ClockSrc::Core))).unwrap();
         dbg!(&output);
         assert!(!output.is_empty());
+    }
+
+    #[cfg(target_arch = "arm")]
+    #[test]
+    fn test_get_mem() {
+        let output = get_mem(Src::Mem(MemSrc::Arm));
+        dbg!(&output);
+        if !output.is_ok() {
+            panic!()
+        }
     }
 }
