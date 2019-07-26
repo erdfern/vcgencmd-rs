@@ -85,10 +85,7 @@ mod tests {
 
     #[test]
     fn exec_command_works() {
-        let ls_output = exec_command(
-            "measure_clock",
-            &resolve_arg(Src::ClockSrc(ClockSrc::Core)),
-        )
+        let ls_output = exec_command(Cmd::MeasureClock, Src::ClockSrc(ClockSrc::Core))
             .unwrap();
         dbg!(&ls_output);
         assert!(!ls_output.is_empty());
