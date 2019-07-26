@@ -24,6 +24,7 @@ pub enum Args {
 /// Execute the given command and capture its std_output
 fn exec_command(command: &str, arg: &str) -> Result<String, PopenError> {
     let vcgencmd_output = Exec::cmd("vcgencmd")
+        .arg(command)
         .arg(arg)
         .stdout(Redirection::Pipe)
         .capture()?
@@ -69,7 +70,11 @@ mod tests {
 
     #[test]
     fn exec_command_works() {
-        let ls_output = exec_command("ls", "-a").unwrap();
+        let ls_output = exec_command(
+            "measure_clock",
+            &resolve_arg(Args::ClockArgs(ClockArgs::Core)),
+        )
+        .unwrap();
         dbg!(&ls_output);
         assert!(!ls_output.is_empty());
     }
