@@ -4,12 +4,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44355cc6-225c-45fd-a5a5-028723a610ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/parsers.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/integration_test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration_test.rs" afterDir="false" />
-    </list>
+    <list default="true" id="44355cc6-225c-45fd-a5a5-028723a610ed" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +81,7 @@
       <workItem from="1564129602514" duration="4111000" />
       <workItem from="1564137850257" duration="1304000" />
       <workItem from="1564139450408" duration="30000" />
-      <workItem from="1564139722529" duration="6809000" />
+      <workItem from="1564139722529" duration="7465000" />
     </task>
     <servers />
   </component>
