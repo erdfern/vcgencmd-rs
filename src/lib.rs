@@ -50,7 +50,7 @@ pub fn exec_command(command: Cmd, arg: Src) -> Result<String, PopenError> {
 /// Measure the clock of the selected `ClockSrc`, returning the frequency as isize
 pub fn measure_clock(src: Src) -> Result<isize, ExecutionError> {
     let output = exec_command(Cmd::MeasureClock, src).map_err(ExecutionError::Popen)?;
-    let frequency = output.split("=").collect::<Vec<_>>()[1].parse::<isize>().map_err(ExecutionError::Parse)?;
+    let frequency: isize = output.split("=").collect::<Vec<_>>()[1].parse::<isize>().map_err(ExecutionError::Parse)?;
     Ok(frequency)
 }
 
