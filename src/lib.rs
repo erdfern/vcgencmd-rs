@@ -1,5 +1,6 @@
 //! This crate contains bindings for the RaspberryPi's vcgencmd cli tool
 use std::num::{ParseFloatError, ParseIntError};
+
 use subprocess::{Exec, PopenError, Redirection};
 
 mod parsers;
@@ -174,8 +175,30 @@ mod tests {
     fn test_get_mem() {
         let output = get_mem(Src::Mem(MemSrc::Arm));
         dbg!(&output);
-        if !output.is_ok() {
-            panic!()
-        }
+        debug_assert_eq!(output.is_ok(), true)
+    }
+
+    #[cfg(target_arch = "arm")]
+    #[test]
+    fn test_measure_temp() {
+        let output = measure_temp();
+        dbg!(&output);
+        debug_assert_eq!(output.is_ok(), true)
+    }
+
+    #[cfg(target_arch = "arm")]
+    #[test]
+    fn test_measure_volts() {
+        let output = measure_volts(Src::Volt(VoltSrc::Core));
+        dbg!(&output);
+        debug_assert_eq!(output.is_ok(), true)
+    }
+
+    #[cfg(target_arch = "arm")]
+    #[test]
+    fn test_measure_frequency() {
+        let output = get_mem(Src::Mem(MemSrc::Arm));
+        dbg!(&output);
+        debug_assert_eq!(output.is_ok(), true)
     }
 }
