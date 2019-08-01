@@ -3,9 +3,9 @@
 #[cfg(feature = "serde_support")]
 use serde::{Deserialize, Serialize};
 
+use bitpat::bitpat;
 use std::num::{ParseFloatError, ParseIntError};
 use subprocess::{Exec, PopenError, Redirection};
-use bitpat::bitpat;
 
 mod parsers;
 
@@ -62,21 +62,8 @@ pub enum Cmd {
 
 /// This struct represents the possible information in a bit-pattern you would get
 /// from the get_throttled command.
-#[cfg(not(feature = "serde_support"))]
 #[derive(Debug, Default, PartialOrd, PartialEq)]
-pub struct ThrottledStatus {
-    pub arm_frequency_cap_occurred: bool,
-    pub arm_frequency_capped: bool,
-    pub currently_throttled: bool,
-    pub soft_temp_limit_active: bool,
-    pub soft_temp_limit_occurred: bool,
-    pub throttling_occurred: bool,
-    pub under_voltage: bool,
-    pub under_voltage_occurred: bool,
-}
-
-#[cfg(feature = "serde_support")]
-#[derive(Serialize, Deserialize, Default, Debug, PartialOrd, PartialEq)]
+#[cfg_attr(feature = "serde_support", derive(Deserialize, Serialize))]
 pub struct ThrottledStatus {
     pub arm_frequency_cap_occurred: bool,
     pub arm_frequency_capped: bool,
@@ -210,7 +197,7 @@ fn resolve_command(cmd: Cmd) -> String {
         Cmd::MeasureTemp => "measure_temp",
         Cmd::MeasureVolts => "measure_volts",
     }
-        .to_owned();
+    .to_owned();
 
     command
 }
@@ -236,7 +223,7 @@ fn resolve_src(src: Src) -> String {
         Src::Volt(VoltSrc::SdramI) => "sdram_i",
         Src::Volt(VoltSrc::SdramP) => "sdram_p",
     }
-        .to_owned();
+    .to_owned();
 
     source
 }
