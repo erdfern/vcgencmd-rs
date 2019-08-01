@@ -61,8 +61,21 @@ pub enum Cmd {
 
 /// This struct represents the possible information in a bit-pattern you would get
 /// from the get_throttled command.
-#[cfg(feature = "serde")]
+#[cfg(not(feature = "serde_support"))]
 #[derive(Debug, Default, PartialOrd, PartialEq)]
+pub struct ThrottledStatus {
+    arm_frequency_cap_occurred: bool,
+    arm_frequency_capped: bool,
+    currently_throttled: bool,
+    soft_temp_limit_active: bool,
+    soft_temp_limit_occurred: bool,
+    throttling_occurred: bool,
+    under_voltage: bool,
+    under_voltage_occurred: bool,
+}
+
+#[cfg(feature = "serde_support")]
+#[derive(Serialize, Deserialize, Default, Debug, PartialOrd, PartialEq)]
 pub struct ThrottledStatus {
     arm_frequency_cap_occurred: bool,
     arm_frequency_capped: bool,

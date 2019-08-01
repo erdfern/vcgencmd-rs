@@ -1,17 +1,20 @@
 [package]
 name = "vcgencmd"
-categories: ["embedded", "hardware-support"]
-keywords: ["raspberry", "pi", "info", "system"]
+categories = ["embedded", "hardware-support"]
+keywords = ["raspberry", "pi", "info", "system"]
 license = "MIT"
-version = "0.1.4"
+version = "0.2.0"
 authors = ["Linus Keiser <linus@keiser.co>"]
 edition = "2018"
 description = "Bindings for Raspberry Pi's vcgencmd utility"
 readme = "README.md"
 
+[badges]
+gitlab = {repository = "https://gitlab.com/decisional/vcgencmd-rs.git" }
+
 [features]
 default = []
-serde = ["serde"]
+serde_support = ["serde"]
 
 [dependencies]
 subprocess = "0.1.18"

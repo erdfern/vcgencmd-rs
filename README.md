@@ -1,6 +1,5 @@
 # Bindings for RaspberryPi's vcgencmd utility
 
-<!-- [![Build Status](https://semaphoreci.com/api/v1/sunny-g/xdr/branches/master/badge.svg)](https://semaphoreci.com/sunny-g/xdr) -->
 [![Crates.io](https://img.shields.io/crates/v/vcgencmd.svg)](https://crates.io/crates/vcgencmd)
 [![Documentation](https://docs.rs/vcgencmd/badge.svg)](https://docs.rs/serde_rustler)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
@@ -19,10 +18,10 @@ Install from [Crates.io](https://crates.io/crates/vcgencmd):
 vcgencmd = "0.2.0"
 ```
 
-Serialization and deserialization for the few structs this crate contains are supported via a `serde` feature flag:
+Serialization and deserialization for the few structs this crate contains are supported via a `serde_support` feature flag:
 ```toml
 [dependencies]
-vcgencmd = {version: "0.2.0", features = ["serde"]
+vcgencmd = {version: "0.2.0", features = ["serde_support"]
 ```
 
 ## Quick Start
