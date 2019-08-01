@@ -1,7 +1,5 @@
 extern crate vcgencmd;
 
-use vcgencmd::ClockSrc;
-
 #[cfg(target_arch = "arm")]
 #[test]
 fn test_measure_clock() {

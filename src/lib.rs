@@ -64,27 +64,27 @@ pub enum Cmd {
 #[cfg(not(feature = "serde_support"))]
 #[derive(Debug, Default, PartialOrd, PartialEq)]
 pub struct ThrottledStatus {
-    arm_frequency_cap_occurred: bool,
-    arm_frequency_capped: bool,
-    currently_throttled: bool,
-    soft_temp_limit_active: bool,
-    soft_temp_limit_occurred: bool,
-    throttling_occurred: bool,
-    under_voltage: bool,
-    under_voltage_occurred: bool,
+    pub arm_frequency_cap_occurred: bool,
+    pub arm_frequency_capped: bool,
+    pub currently_throttled: bool,
+    pub soft_temp_limit_active: bool,
+    pub soft_temp_limit_occurred: bool,
+    pub throttling_occurred: bool,
+    pub under_voltage: bool,
+    pub under_voltage_occurred: bool,
 }
 
 #[cfg(feature = "serde_support")]
 #[derive(Serialize, Deserialize, Default, Debug, PartialOrd, PartialEq)]
 pub struct ThrottledStatus {
-    arm_frequency_cap_occurred: bool,
-    arm_frequency_capped: bool,
-    currently_throttled: bool,
-    soft_temp_limit_active: bool,
-    soft_temp_limit_occurred: bool,
-    throttling_occurred: bool,
-    under_voltage: bool,
-    under_voltage_occurred: bool,
+    pub arm_frequency_cap_occurred: bool,
+    pub arm_frequency_capped: bool,
+    pub currently_throttled: bool,
+    pub soft_temp_limit_active: bool,
+    pub soft_temp_limit_occurred: bool,
+    pub throttling_occurred: bool,
+    pub under_voltage: bool,
+    pub under_voltage_occurred: bool,
 }
 
 /// Execute the given command and capture its std_output without modifying it
@@ -166,7 +166,7 @@ pub fn get_throttled() -> Result<isize, ExecutionError> {
 /// let throttle_status = interpret_bit_pattern(0b111100000000000001010_isize);
 /// // or bit_pattern = get_throttle().unwrap();
 /// // let throttle status = interpret_bit_pattern(bit_pattern);
-/// assert_eq!(throttle_info,
+/// assert_eq!(throttle_status,
 ///            ThrottledStatus {
 ///               arm_frequency_cap_occurred: true,
 ///               arm_frequency_capped: false,
