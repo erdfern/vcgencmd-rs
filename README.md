@@ -4,7 +4,7 @@
 [![Documentation](https://docs.rs/vcgencmd/badge.svg)](https://docs.rs/serde_rustler)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-`vcgencmd` provides a way to interact with the vcgencmd utility included in Raspian.
+`vcgencmd` provides a way to interact with the vcgencmd utility included in Raspbian.
 
 As of yet, not all vcgencmd commands have a binding. To see which commands are missing, take a look at PROGRESS.md in the projects repo.
 If you need a specific command that's unimplemented, feel free to open a pull request either asking  for it or submitting it yourself. 
