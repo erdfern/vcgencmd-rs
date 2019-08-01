@@ -5,9 +5,13 @@ version = "0.1.4"
 authors = ["Linus Keiser <linus@keiser.co>"]
 edition = "2018"
 description = "Bindings for Raspberry Pi's vcgencmd utility"
+readme = "README.md"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+default = []
+serde = ["serde"]
 
 [dependencies]
 subprocess = "0.1.18"
 bitpat = "0.1.1"
+serde = {version = "1.0.98", optional = true}

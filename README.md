@@ -1,6 +1,31 @@
-# Rust bindings for Raspberry Pi's vcgencmd utility
+# Bindings for RaspberryPi's vcgencmd utility
 
-*WIP*
+<!-- [![Build Status](https://semaphoreci.com/api/v1/sunny-g/xdr/branches/master/badge.svg)](https://semaphoreci.com/sunny-g/xdr) -->
+[![Crates.io](https://img.shields.io/crates/v/vcgencmd.svg)](https://crates.io/crates/vcgencmd)
+[![Documentation](https://docs.rs/vcgencmd/badge.svg)](https://docs.rs/serde_rustler)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-This has been written in a single morining, thus it's not complete yet and could really use some refactoring.
-Basic functionality is, however, available. This Readme will be updated to be useful at some point.
+`vcgencmd` provides a way to interact with the vcgencmd utility included in Raspian.
+
+As of yet, not all vcgencmd commands have a binding. To see which commands are missing, take a look at PROGRESS.md in the projects repo.
+
+## Installation
+
+Install from [Crates.io](https://crates.io/crates/vcgencmd):
+
+```toml
+[dependencies]
+vcgencmd = "0.2.0"
+```
+
+Serialization and deserialization for the few structs this crate contains are supported via a `serde` feature flag:
+```toml
+[dependencies]
+vcgencmd = {version: "0.2.0", features = ["serde"]
+```
+
+## Quick Start
+
+```rust
+use vcgencmd::{measure_temp, get_throttle};
+```

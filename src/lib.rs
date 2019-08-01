@@ -1,4 +1,5 @@
-//! This crate contains bindings for the RaspberryPi's vcgencmd cli tool
+//! # Bindings for the RaspberryPi's vcgencmd cli utility
+
 use std::num::{ParseFloatError, ParseIntError};
 
 use subprocess::{Exec, PopenError, Redirection};
@@ -60,6 +61,7 @@ pub enum Cmd {
 
 /// This struct represents the possible information in a bit-pattern you would get
 /// from the get_throttled command.
+#[cfg(feature = "serde")]
 #[derive(Debug, Default, PartialOrd, PartialEq)]
 pub struct ThrottledStatus {
     arm_frequency_cap_occurred: bool,
