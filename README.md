@@ -8,6 +8,7 @@
 `vcgencmd` provides a way to interact with the vcgencmd utility included in Raspian.
 
 As of yet, not all vcgencmd commands have a binding. To see which commands are missing, take a look at PROGRESS.md in the projects repo.
+If you need a specific command that's unimplemented, feel free to open a pull request either asking  for it or submitting it yourself. 
 
 ## Installation
 
@@ -27,5 +28,10 @@ vcgencmd = {version: "0.2.0", features = ["serde"]
 ## Quick Start
 
 ```rust
-use vcgencmd::{measure_temp, get_throttle};
+use vcgencmd::{measure_temp, get_throttle, interpret_bit_pattern};
+
+// Gives the current temperature as f64 in °C
+let temp = measure_temp();
+
+let throttle_status = interpret_bit_pattern(get_throttle.unwrap());
 ```

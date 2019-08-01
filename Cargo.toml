@@ -1,5 +1,7 @@
 [package]
 name = "vcgencmd"
+categories: ["embedded", "hardware-support"]
+keywords: ["raspberry", "pi", "info", "system"]
 license = "MIT"
 version = "0.1.4"
 authors = ["Linus Keiser <linus@keiser.co>"]
