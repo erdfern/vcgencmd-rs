@@ -2,6 +2,7 @@
 
 use std::num::{ParseFloatError, ParseIntError};
 
+use serde::{Deserialize, Serialize};
 use subprocess::{Exec, PopenError, Redirection};
 
 use bitpat::bitpat;
@@ -209,7 +210,7 @@ fn resolve_command(cmd: Cmd) -> String {
         Cmd::MeasureTemp => "measure_temp",
         Cmd::MeasureVolts => "measure_volts",
     }
-    .to_owned();
+        .to_owned();
 
     command
 }
@@ -235,7 +236,7 @@ fn resolve_src(src: Src) -> String {
         Src::Volt(VoltSrc::SdramI) => "sdram_i",
         Src::Volt(VoltSrc::SdramP) => "sdram_p",
     }
-    .to_owned();
+        .to_owned();
 
     source
 }
