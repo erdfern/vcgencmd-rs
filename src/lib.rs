@@ -4,7 +4,7 @@ use std::num::{ParseFloatError, ParseIntError};
 use subprocess::{Exec, PopenError, Redirection};
 
 use bitpat::bitpat;
-::bitpat
+
 mod parsers;
 
 // "vcgencmd" must be in PATH
@@ -60,7 +60,7 @@ pub enum Cmd {
 
 /// This struct represents the possible information in a bit-pattern you would get
 /// from the get_throttled command.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, PartialOrd, PartialEq)]
 pub struct ThrottledStatus {
     arm_frequency_cap_occurred: bool,
     arm_frequency_capped: bool,
@@ -131,21 +131,38 @@ pub fn get_throttled() -> Result<isize, ExecutionError> {
 
 /// Interprets a bit pattern obtained from `get_throttled` in the following way:
 /// ```txt
-/// 1110000000000000010
-/// |||             |||_ under-voltage
-/// |||             ||_ currently throttled
-/// |||             |_ arm frequency capped
-/// |||_ under-voltage has occurred since last reboot
-/// ||_ throttling has occurred since last reboot
-/// |_ arm frequency capped has occurred since last reboot
+/// 111100000000000001010
+/// ||||             ||||_ under-voltage
+/// ||||             |||_ currently throttled
+/// ||||             ||_ arm frequency capped
+/// ||||             |_ soft temperature reached
+/// ||||_ under-voltage has occurred since last reboot
+/// |||_ throttling has occurred since last reboot
+/// ||_ arm frequency capped has occurred since last reboot
+/// |_ soft temperature reached since last reboot
 /// ```
 pub fn interpret_bit_pattern(pattern: isize) -> ThrottledStatus {
-    let mut throttled_status = ThrottledStatus::default();
-    if bitpat!(1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) {
-        throttled_status.under_voltage = true;
-    };
+    let soft_temp_limit_occurred = bitpat!(1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _)(pattern);
+    let arm_frequency_cap_occurred = bitpat!(_ 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _)(pattern);
+    let throttling_occurred = bitpat!(_ _ 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _)(pattern);
+    let under_voltage_occurred = bitpat!(_ _ _ 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _)(pattern);
 
-    throttled_status
+    let soft_temp_limit_active = bitpat!(_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _ _ _)(pattern);
+    let arm_frequency_capped = bitpat!(_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _ _)(pattern);
+    let currently_throttled = bitpat!(_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _)(pattern);
+    let under_voltage = bitpat!(_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1)(pattern);
+
+
+    ThrottledStatus {
+        arm_frequency_cap_occurred,
+        arm_frequency_capped,
+        currently_throttled,
+        soft_temp_limit_active,
+        soft_temp_limit_occurred,
+        throttling_occurred,
+        under_voltage,
+        under_voltage_occurred,
+    }
 }
 
 fn resolve_command(cmd: Cmd) -> String {
@@ -202,10 +219,38 @@ mod tests {
         assert_eq!("measure_clock", resolve_command(Cmd::MeasureClock));
     }
 
-    //#[test]
-    // fn test_interpret_bit_pattern() {
-    //  let throttled_info = interpret_bit_pattern(327680);
-    //}
+    #[test]
+    fn test_interpret_bit_pattern() {
+        let throttled_info = interpret_bit_pattern(0b111100000000000001010);
+        assert_eq!(
+            throttled_info,
+            ThrottledStatus {
+                arm_frequency_cap_occurred: true,
+                arm_frequency_capped: false,
+                currently_throttled: true,
+                soft_temp_limit_active: true,
+                soft_temp_limit_occurred: true,
+                throttling_occurred: true,
+                under_voltage: false,
+                under_voltage_occurred: true,
+            }
+        );
+
+        let throttled_info2 = interpret_bit_pattern(0b111100000000000001111);
+        assert_eq!(
+            throttled_info2,
+            ThrottledStatus {
+                arm_frequency_cap_occurred: true,
+                arm_frequency_capped: true,
+                currently_throttled: true,
+                soft_temp_limit_active: true,
+                soft_temp_limit_occurred: true,
+                throttling_occurred: true,
+                under_voltage: true,
+                under_voltage_occurred: true,
+            }
+        )
+    }
 
     #[cfg(target_arch = "arm")]
     #[test]
