@@ -1,10 +1,10 @@
 //! # Bindings for the RaspberryPi's vcgencmd cli utility
 
-use std::num::{ParseFloatError, ParseIntError};
-
+#[cfg(feature = "serde_support")]
 use serde::{Deserialize, Serialize};
-use subprocess::{Exec, PopenError, Redirection};
 
+use std::num::{ParseFloatError, ParseIntError};
+use subprocess::{Exec, PopenError, Redirection};
 use bitpat::bitpat;
 
 mod parsers;
