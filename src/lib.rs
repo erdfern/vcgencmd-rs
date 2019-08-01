@@ -141,6 +141,28 @@ pub fn get_throttled() -> Result<isize, ExecutionError> {
 /// ||_ arm frequency capped has occurred since last reboot
 /// |_ soft temperature reached since last reboot
 /// ```
+///
+/// # Examples
+///
+/// Basic usage:
+///
+/// ```rust
+/// use vcgencmd::{interpret_bit_pattern, ThrottledStatus};
+/// let throttle_status = interpret_bit_pattern(0b111100000000000001010_isize);
+/// // or bit_pattern = get_throttle().unwrap();
+/// // let throttle status = interpret_bit_pattern(bit_pattern);
+/// assert_eq!(throttle_info,
+///            ThrottledStatus {
+///               arm_frequency_cap_occurred: true,
+///               arm_frequency_capped: false,
+///               currently_throttled: true,
+///               soft_temp_limit_active: true,
+///               soft_temp_limit_occurred: true,
+///               throttling_occurred: true,
+///               under_voltage: false,
+///               under_voltage_occurred: true,
+/// })
+/// ```
 pub fn interpret_bit_pattern(pattern: isize) -> ThrottledStatus {
     let soft_temp_limit_occurred = bitpat!(1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _)(pattern);
     let arm_frequency_cap_occurred = bitpat!(_ 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _)(pattern);
@@ -151,7 +173,6 @@ pub fn interpret_bit_pattern(pattern: isize) -> ThrottledStatus {
     let arm_frequency_capped = bitpat!(_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _ _)(pattern);
     let currently_throttled = bitpat!(_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _)(pattern);
     let under_voltage = bitpat!(_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1)(pattern);
-
 
     ThrottledStatus {
         arm_frequency_cap_occurred,
@@ -173,7 +194,7 @@ fn resolve_command(cmd: Cmd) -> String {
         Cmd::MeasureTemp => "measure_temp",
         Cmd::MeasureVolts => "measure_volts",
     }
-        .to_owned();
+    .to_owned();
 
     command
 }
@@ -199,7 +220,7 @@ fn resolve_src(src: Src) -> String {
         Src::Volt(VoltSrc::SdramI) => "sdram_i",
         Src::Volt(VoltSrc::SdramP) => "sdram_p",
     }
-        .to_owned();
+    .to_owned();
 
     source
 }
