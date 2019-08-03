@@ -1,0 +1,15 @@
+stages:
+  - test
+  - build
+
+raspbian_test:
+  stage: test
+  image: raspbian/stretch
+  script:
+    - cargo test --verbose
+
+raspbian_build:
+  stage: build
+  image: raspbian/stretch
+  script:
+    - cargo build --release --verbose
