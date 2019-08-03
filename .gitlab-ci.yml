@@ -4,12 +4,20 @@ stages:
 
 raspbian_test:
   stage: test
+  tags:
+    - raspberrypi
+    - raspbian
+    - arm
   image: raspbian/stretch
   script:
     - cargo test --verbose
 
 raspbian_build:
   stage: build
+  tags:
+    - raspberrypi
+    - raspbian
+    - arm
   image: raspbian/stretch
   script:
     - cargo build --release --verbose
