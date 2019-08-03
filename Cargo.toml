@@ -12,9 +12,6 @@ edition = "2018"
 description = "Bindings for Raspberry Pi's vcgencmd utility"
 readme = "README.md"
 
-[badges]
-gitlab = {repository = "https://gitlab.com/decisional/vcgencmd-rs.git" }
-
 [features]
 default = []
 serde_support = ["serde"]
