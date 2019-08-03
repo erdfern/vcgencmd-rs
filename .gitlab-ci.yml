@@ -3,6 +3,8 @@ stages:
   - build
 
 before_script:
+  - sudo apt update
+  - sudo apt install curl
   - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y
 
 raspbian_test:
