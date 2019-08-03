@@ -4,7 +4,8 @@ stages:
 
 before_script:
   - sudo apt-get update
-  - sudo apt-get install curl -y
+  - sudo apt-get -y install curl
+  - sudo apt-get -y install build-essential
   - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y
   - source ~/.cargo/env
 
