@@ -6,7 +6,7 @@
 
 `vcgencmd` provides a way to interact with the vcgencmd utility included in Raspbian.
 
-As of yet, not all vcgencmd commands have a binding. To see which commands are missing, take a look at PROGRESS.md in the projects repo.
+As of yet, not all vcgencmd commands have a binding. To see which commands are missing, take a look at PROGRESS.md in the projects repo. I will only actively add bindings for commands if I happen to need them.
 If you need a specific command that's unimplemented, feel free to open an issue asking for it or submit it yourself.
 
 ## Installation
