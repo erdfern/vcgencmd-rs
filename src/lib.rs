@@ -9,9 +9,6 @@ use subprocess::{Exec, PopenError, Redirection};
 
 mod parsers;
 
-// "vcgencmd" must be in PATH
-const VCGENCMD_INVOCATION: &str = "sudo vcgencmd";
-
 #[derive(Debug)]
 pub enum ExecutionError {
     Popen(PopenError),
@@ -77,19 +74,13 @@ pub struct ThrottledStatus {
 
 /// Execute the given command and capture its std_output without modifying it
 pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
-    if let None = src {
-        let vcgencmd_output = Exec::shell(VCGENCMD_INVOCATION)
-            .arg(resolve_command(command))
-            .stdout(Redirection::Pipe)
-            .capture()?
-            .stdout_str();
+    // "vcgencmd" must be in PATH
+    const VCGENCMD_INVOCATION: &str = "vcgencmd";
 
-        return Ok(vcgencmd_output);
-    };
-
-    let vcgencmd_output = Exec::cmd(VCGENCMD_INVOCATION)
+    let vcgencmd_output = Exec::cmd("sudo")
+        .arg(VCGENCMD_INVOCATION)
         .arg(resolve_command(command))
-        .arg(resolve_src(src.unwrap()))
+        .arg(resolve_src(src).unwrap_or(String::new()))
         .stdout(Redirection::Pipe)
         .capture()?
         .stdout_str();
@@ -202,30 +193,28 @@ fn resolve_command(cmd: Cmd) -> String {
     command
 }
 
-fn resolve_src(src: Src) -> String {
-    let source = match src {
-        Src::Clock(ClockSrc::Arm) => "arm",
-        Src::Clock(ClockSrc::Core) => "core",
-        Src::Clock(ClockSrc::Dpi) => "dpi",
-        Src::Clock(ClockSrc::Emmc) => "emmc",
-        Src::Clock(ClockSrc::H264) => "h264",
-        Src::Clock(ClockSrc::Hdmi) => "hdmi",
-        Src::Clock(ClockSrc::Isp) => "isp",
-        Src::Clock(ClockSrc::Pixel) => "pixel",
-        Src::Clock(ClockSrc::Pwm) => "pwm",
-        Src::Clock(ClockSrc::Uart) => "uart",
-        Src::Clock(ClockSrc::V3d) => "v3d",
-        Src::Clock(ClockSrc::Vec) => "vec",
-        Src::Mem(MemSrc::Arm) => "arm",
-        Src::Mem(MemSrc::Gpu) => "gpu",
-        Src::Volt(VoltSrc::Core) => "core",
-        Src::Volt(VoltSrc::SdramC) => "sdram_c",
-        Src::Volt(VoltSrc::SdramI) => "sdram_i",
-        Src::Volt(VoltSrc::SdramP) => "sdram_p",
+fn resolve_src(src: Option<Src>) -> Option<String> {
+    match src {
+        Some(Src::Clock(ClockSrc::Arm)) => Some("arm".to_owned()),
+        Some(Src::Clock(ClockSrc::Core)) => Some("core".to_owned()),
+        Some(Src::Clock(ClockSrc::Dpi)) => Some("dpi".to_owned()),
+        Some(Src::Clock(ClockSrc::Emmc)) => Some("emmc".to_owned()),
+        Some(Src::Clock(ClockSrc::H264)) => Some("h264".to_owned()),
+        Some(Src::Clock(ClockSrc::Hdmi)) => Some("hdmi".to_owned()),
+        Some(Src::Clock(ClockSrc::Isp)) => Some("isp".to_owned()),
+        Some(Src::Clock(ClockSrc::Pixel)) => Some("pixel".to_owned()),
+        Some(Src::Clock(ClockSrc::Pwm)) => Some("pwm".to_owned()),
+        Some(Src::Clock(ClockSrc::Uart)) => Some("uart".to_owned()),
+        Some(Src::Clock(ClockSrc::V3d)) => Some("v3d".to_owned()),
+        Some(Src::Clock(ClockSrc::Vec)) => Some("vec".to_owned()),
+        Some(Src::Mem(MemSrc::Arm)) => Some("arm".to_owned()),
+        Some(Src::Mem(MemSrc::Gpu)) => Some("gpu".to_owned()),
+        Some(Src::Volt(VoltSrc::Core)) => Some("core".to_owned()),
+        Some(Src::Volt(VoltSrc::SdramC)) => Some("sdram_c".to_owned()),
+        Some(Src::Volt(VoltSrc::SdramI)) => Some("sdram_i".to_owned()),
+        Some(Src::Volt(VoltSrc::SdramP)) => Some("sdram_p".to_owned()),
+        None => None,
     }
-    .to_owned();
-
-    source
 }
 
 #[cfg(test)]
@@ -234,7 +223,12 @@ mod tests {
 
     #[test]
     fn test_resolve_src() {
-        assert_eq!("arm", resolve_src(Src::Clock(ClockSrc::Arm)));
+        assert_eq!(
+            Some(String::from("arm")),
+            resolve_src(Some(Src::Clock(ClockSrc::Arm)))
+        );
+
+        assert_eq!(None, resolve_src(None));
     }
 
     #[test]
@@ -281,7 +275,7 @@ mod tests {
     fn test_exec_command() {
         let output = exec_command(Cmd::MeasureClock, Some(Src::Clock(ClockSrc::Core))).unwrap();
         dbg!(&output);
-        assert!(!output.is_empty());
+        assert!(output.contains("frequency"));
     }
 
     #[cfg(target_arch = "arm")]

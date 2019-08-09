@@ -25,7 +25,6 @@ raspbian_lint:
     - raspbian
   script:
     - rustup component add clippy
-    - cargo install clippy -v
   allow_failure: true
 
 raspbian_build:
