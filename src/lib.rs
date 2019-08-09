@@ -10,7 +10,7 @@ use subprocess::{Exec, PopenError, Redirection};
 mod parsers;
 
 // "vcgencmd" must be in PATH
-const VCGENCMD_INVOCATION: &str = "vcgencmd";
+const VCGENCMD_INVOCATION: &str = "sudo vcgencmd";
 
 #[derive(Debug)]
 pub enum ExecutionError {
