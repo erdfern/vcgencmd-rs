@@ -10,7 +10,7 @@ use subprocess::{Exec, PopenError, Redirection};
 mod parsers;
 
 // "vcgencmd" must be in PATH
-const VCGENCMD_INVOCATION: &str = "sudo vcgencmd ";
+const VCGENCMD_INVOCATION: &str = "sudo vcgencmd";
 
 #[derive(Debug)]
 pub enum ExecutionError {
@@ -79,6 +79,7 @@ pub struct ThrottledStatus {
 pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
     if let None = src {
         let invokation = format!("{} {}", VCGENCMD_INVOCATION, resolve_command(command));
+        dbg!(&invokation);
         let vcgencmd_output = Exec::shell(invokation)
             .stdout(Redirection::Pipe)
             .capture()?
