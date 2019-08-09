@@ -77,18 +77,6 @@ pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError
     // "vcgencmd" must be in PATH
     const VCGENCMD_INVOCATION: &str = "vcgencmd";
 
-    // let invokation = if src.is_none() {
-    //     format!("{} {}", VCGENCMD_INVOCATION, resolve_command(command))
-    // } else {
-    //     format!(
-    //         "{} {} {}",
-    //         VCGENCMD_INVOCATION,
-    //         resolve_command(command),
-    //         resolve_src(src.unwrap())
-    //     )
-    // };
-    // dbg!(&invokation);
-
     let vcgencmd_output = Exec::cmd("sudo")
         .arg(VCGENCMD_INVOCATION)
         .arg(resolve_command(command))
@@ -235,7 +223,12 @@ mod tests {
 
     #[test]
     fn test_resolve_src() {
-        assert_eq!("arm", resolve_src(Src::Clock(ClockSrc::Arm)));
+        assert_eq!(
+            Some(String::from("arm")),
+            resolve_src(Some(Src::Clock(ClockSrc::Arm)))
+        );
+
+        assert_eq!(None, resolve_src(None));
     }
 
     #[test]
@@ -280,7 +273,7 @@ mod tests {
     #[cfg(target_arch = "arm")]
     #[test]
     fn test_exec_command() {
-        let output = exec_command(Cmd::MeasureClock, Some(Src::Clock(ClockSrc::Core))).unwrap();
+        let output = exec_command(Cmd::MeasureClock, Some(Src::Clock(ClockSrc::Core)));
         dbg!(&output);
         assert!(!output.is_empty());
     }
