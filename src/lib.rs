@@ -77,26 +77,19 @@ pub struct ThrottledStatus {
 
 /// Execute the given command and capture its std_output without modifying it
 pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
-    if let None = src {
-        let invokation = format!("{} {}", VCGENCMD_INVOCATION, resolve_command(command));
-        dbg!(&invokation);
-        let vcgencmd_output = Exec::shell(invokation)
-            .stdout(Redirection::Pipe)
-            .capture()?
-            .stdout_str();
-
-        // let vcgencmd_output = Exec::shell(VCGENCMD_INVOCATION)
-        //     .arg(resolve_command(command))
-        //     .stdout(Redirection::Pipe)
-        //     .capture()?
-        //     .stdout_str();
-
-        return Ok(vcgencmd_output);
+    let invokation = if src.is_none() {
+        format!("{} {}", VCGENCMD_INVOCATION, resolve_command(command))
+    } else {
+        format!(
+            "{} {} {}",
+            VCGENCMD_INVOCATION,
+            resolve_command(command),
+            resolve_src(src.unwrap())
+        )
     };
+    dbg!(&invokation);
 
-    let vcgencmd_output = Exec::shell(VCGENCMD_INVOCATION)
-        .arg(resolve_command(command))
-        .arg(resolve_src(src.expect("Could not resolve source")))
+    let vcgencmd_output = Exec::shell(invokation)
         .stdout(Redirection::Pipe)
         .capture()?
         .stdout_str();
