@@ -78,7 +78,7 @@ pub struct ThrottledStatus {
 /// Execute the given command and capture its std_output without modifying it
 pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
     if let None = src {
-        let vcgencmd_output = Exec::cmd(VCGENCMD_INVOCATION)
+        let vcgencmd_output = Exec::shell(VCGENCMD_INVOCATION)
             .arg(resolve_command(command))
             .stdout(Redirection::Pipe)
             .capture()?
