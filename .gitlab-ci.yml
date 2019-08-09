@@ -1,5 +1,6 @@
 stages:
   - test
+  - lint
   - build
 
 before_script:
@@ -18,6 +19,13 @@ raspbian_test:
   script:
     - cargo test --verbose
 
+raspbian_lint:
+  stage: lint
+  tags:
+    - raspbian
+  script:
+    - rustup component add clippy
+    - cargo install clippy -v
 raspbian_build:
   stage: build
   tags:
