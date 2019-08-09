@@ -13,9 +13,7 @@ raspbian_test:
   stage: test
   tags:
     - raspberrypi
-    - raspbian
-    - arm
-  image: raspbian/stretch
+    - armv7
   script:
     - cargo test --verbose
 
@@ -23,8 +21,6 @@ raspbian_build:
   stage: build
   tags:
     - raspberrypi
-    - raspbian
-    - arm
-  image: raspbian/stretch
+    - armv7
   script:
     - cargo build --release --verbose
