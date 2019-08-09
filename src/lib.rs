@@ -89,7 +89,7 @@ pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError
 
     let vcgencmd_output = Exec::cmd(VCGENCMD_INVOCATION)
         .arg(resolve_command(command))
-        .arg(resolve_src(src.unwrap()))
+        .arg(resolve_src(src.expect("Could not resolve source")))
         .stdout(Redirection::Pipe)
         .capture()?
         .stdout_str();
