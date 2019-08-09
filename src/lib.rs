@@ -273,9 +273,9 @@ mod tests {
     #[cfg(target_arch = "arm")]
     #[test]
     fn test_exec_command() {
-        let output = exec_command(Cmd::MeasureClock, Some(Src::Clock(ClockSrc::Core)));
+        let output = exec_command(Cmd::MeasureClock, Some(Src::Clock(ClockSrc::Core))).unwrap();
         dbg!(&output);
-        assert!(!output.is_empty());
+        assert!(output.contains("frequency"));
     }
 
     #[cfg(target_arch = "arm")]
