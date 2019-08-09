@@ -27,10 +27,25 @@ vcgencmd = {version: "0.2.*", features = ["serde_support"]}
 ## Quick Start
 
 ```rust
+// Import the various commands you want to use
 use vcgencmd::{measure_temp, get_throttle, interpret_bit_pattern};
 
-// Gives the current temperature as f64 in °C
-let temp = measure_temp();
+// You'll also want to import the `Src` enum, which holds all available sources
+// for the different commands
+use vcgendcmd::Src;
 
-let throttle_status = interpret_bit_pattern(get_throttle.unwrap());
+// Gives the current temperature as f64 in °C
+let temp = measure_temp().unwrap();
+
+// Measure the arm chips memory usage
+let arm_mem = get_mem(Src::Mem(MemSrc::Arm)).unwrap();
+
+// Measure the voltage at the video core
+let volt_gpu = measure_volts(Src::Volt(VoltSrc::Core)).unwrap();
+
+// Get a bit pattern which represents the throttled state of the system
+let bit_pattern = get_throttle.unwrap();
+
+// Get comprehensive, human readable info about the throttled state of the system
+let throttle_status = interpret_bit_pattern(bit_pattern);
 ```
