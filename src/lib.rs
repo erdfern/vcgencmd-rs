@@ -80,7 +80,7 @@ pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError
     let vcgencmd_output = Exec::cmd("sudo")
         .arg(VCGENCMD_INVOCATION)
         .arg(resolve_command(command))
-        .arg(resolve_src(src).unwrap_or(String::new()))
+        .arg(resolve_src(src).unwrap_or_default())
         .stdout(Redirection::Pipe)
         .capture()?
         .stdout_str();
@@ -181,16 +181,14 @@ pub fn interpret_bit_pattern(pattern: isize) -> ThrottledStatus {
 }
 
 fn resolve_command(cmd: Cmd) -> String {
-    let command = match cmd {
+     match cmd {
         Cmd::GetMem => "get_mem",
         Cmd::GetThrottled => "get_throttled",
         Cmd::MeasureClock => "measure_clock",
         Cmd::MeasureTemp => "measure_temp",
         Cmd::MeasureVolts => "measure_volts",
     }
-    .to_owned();
-
-    command
+    .to_owned()
 }
 
 fn resolve_src(src: Option<Src>) -> Option<String> {
