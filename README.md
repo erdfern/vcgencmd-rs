@@ -1,6 +1,6 @@
 # Bindings for RaspberryPi's vcgencmd utility
 
-![Crates.io(https://img.shields.io/crates/v/vcgencmd)](https://crates.io/crates/vcgencmd)
+[![Crates.io](https://img.shields.io/crates/v/vcgencmd.svg)](https://crates.io/crates/vcgencmd)
 [![Documentation](https://docs.rs/vcgencmd/badge.svg)](https://docs.rs/serde_rustler)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
