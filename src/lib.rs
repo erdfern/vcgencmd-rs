@@ -192,26 +192,28 @@ fn resolve_command(cmd: Cmd) -> String {
 }
 
 fn resolve_src(src: Option<Src>) -> Option<String> {
+    // check for None
+    let src = src.as_ref()?;
+
     match src {
-        Some(Src::Clock(ClockSrc::Arm)) => Some("arm".to_owned()),
-        Some(Src::Clock(ClockSrc::Core)) => Some("core".to_owned()),
-        Some(Src::Clock(ClockSrc::Dpi)) => Some("dpi".to_owned()),
-        Some(Src::Clock(ClockSrc::Emmc)) => Some("emmc".to_owned()),
-        Some(Src::Clock(ClockSrc::H264)) => Some("h264".to_owned()),
-        Some(Src::Clock(ClockSrc::Hdmi)) => Some("hdmi".to_owned()),
-        Some(Src::Clock(ClockSrc::Isp)) => Some("isp".to_owned()),
-        Some(Src::Clock(ClockSrc::Pixel)) => Some("pixel".to_owned()),
-        Some(Src::Clock(ClockSrc::Pwm)) => Some("pwm".to_owned()),
-        Some(Src::Clock(ClockSrc::Uart)) => Some("uart".to_owned()),
-        Some(Src::Clock(ClockSrc::V3d)) => Some("v3d".to_owned()),
-        Some(Src::Clock(ClockSrc::Vec)) => Some("vec".to_owned()),
-        Some(Src::Mem(MemSrc::Arm)) => Some("arm".to_owned()),
-        Some(Src::Mem(MemSrc::Gpu)) => Some("gpu".to_owned()),
-        Some(Src::Volt(VoltSrc::Core)) => Some("core".to_owned()),
-        Some(Src::Volt(VoltSrc::SdramC)) => Some("sdram_c".to_owned()),
-        Some(Src::Volt(VoltSrc::SdramI)) => Some("sdram_i".to_owned()),
-        Some(Src::Volt(VoltSrc::SdramP)) => Some("sdram_p".to_owned()),
-        None => None,
+        Src::Clock(ClockSrc::Arm) => Some("arm".to_owned()),
+        Src::Clock(ClockSrc::Core) => Some("core".to_owned()),
+        Src::Clock(ClockSrc::Dpi) => Some("dpi".to_owned()),
+        Src::Clock(ClockSrc::Emmc) => Some("emmc".to_owned()),
+        Src::Clock(ClockSrc::H264) => Some("h264".to_owned()),
+        Src::Clock(ClockSrc::Hdmi) => Some("hdmi".to_owned()),
+        Src::Clock(ClockSrc::Isp) => Some("isp".to_owned()),
+        Src::Clock(ClockSrc::Pixel) => Some("pixel".to_owned()),
+        Src::Clock(ClockSrc::Pwm) => Some("pwm".to_owned()),
+        Src::Clock(ClockSrc::Uart) => Some("uart".to_owned()),
+        Src::Clock(ClockSrc::V3d) => Some("v3d".to_owned()),
+        Src::Clock(ClockSrc::Vec) => Some("vec".to_owned()),
+        Src::Mem(MemSrc::Arm) => Some("arm".to_owned()),
+        Src::Mem(MemSrc::Gpu) => Some("gpu".to_owned()),
+        Src::Volt(VoltSrc::Core) => Some("core".to_owned()),
+        Src::Volt(VoltSrc::SdramC) => Some("sdram_c".to_owned()),
+        Src::Volt(VoltSrc::SdramI) => Some("sdram_i".to_owned()),
+        Src::Volt(VoltSrc::SdramP) => Some("sdram_p".to_owned()),
     }
 }
 
