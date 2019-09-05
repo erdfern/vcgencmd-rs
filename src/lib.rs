@@ -1,6 +1,6 @@
 //! # Bindings for the RaspberryPi's vcgencmd cli utility
 
-#[cfg(feature = "serde_support")]
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 use bitpat::bitpat;
@@ -60,7 +60,7 @@ pub enum Cmd {
 /// This struct represents the possible information in a bit-pattern you would get
 /// from the get_throttled command.
 #[derive(Debug, Default, PartialOrd, PartialEq)]
-#[cfg_attr(feature = "serde_support", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct ThrottledStatus {
     pub arm_frequency_cap_occurred: bool,
     pub arm_frequency_capped: bool,
@@ -181,7 +181,7 @@ pub fn interpret_bit_pattern(pattern: isize) -> ThrottledStatus {
 }
 
 fn resolve_command(cmd: Cmd) -> String {
-     match cmd {
+    match cmd {
         Cmd::GetMem => "get_mem",
         Cmd::GetThrottled => "get_throttled",
         Cmd::MeasureClock => "measure_clock",

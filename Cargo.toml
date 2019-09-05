@@ -1,9 +1,9 @@
 [package]
 name = "vcgencmd"
 categories = ["embedded", "hardware-support"]
-keywords = ["raspberry", "pi", "info", "system"]
+keywords = ["raspberry", "pi", "raspberrypi", "info", "system"]
 license = "MIT"
-version = "0.2.3"
+version = "0.3.0"
 documentation = "https://docs.rs/vcgencmd"
 repository = "https://gitlab.com/decisional/vcgencmd-rs"
 homepage = "https://gitlab.com/decisional/vcgencmd-rs"
@@ -12,11 +12,18 @@ edition = "2018"
 description = "Bindings for Raspberry Pi's vcgencmd utility"
 readme = "README.md"
 
+[package.metadata.docs.rs]
+features = ["serde"]
+default-target = "armv7-unknown-linux-gnueabihf"
+
 [features]
 default = []
-serde_support = ["serde"]
+
+# Not needed for now, serde feature works implicitly...
+#[namespaced-features]
+#serde = ["crate:serde"]
 
 [dependencies]
 subprocess = "0.1.18"
 bitpat = "0.1.1"
-serde = { version = "1.0.98", features = ["derive"], optional = true }
+serde = { version = "1.0.99", features = ["derive"], optional = true }
