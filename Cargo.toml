@@ -19,6 +19,7 @@ default-target = "armv7-unknown-linux-gnueabihf"
 [features]
 default = []
 
+# Not needed for now, serde feature works implicitly...
 #[namespaced-features]
 #serde = ["crate:serde"]
 
