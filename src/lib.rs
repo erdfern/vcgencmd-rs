@@ -72,6 +72,12 @@ pub struct ThrottledStatus {
     pub under_voltage_occurred: bool,
 }
 
+impl ThrottledStatus {
+    pub fn new(bit_pattern: isize) -> ThrottledStatus {
+        interpret_bit_pattern(bit_pattern)
+    }
+}
+
 /// Execute the given command and capture its std_output without modifying it
 pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
     // "vcgencmd" must be in PATH
