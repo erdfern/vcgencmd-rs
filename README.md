@@ -21,8 +21,8 @@ Install from [Crates.io](https://crates.io/crates/vcgencmd):
 vcgencmd = "0.3.*"
 ```
 
-Serialization and deserialization for the few data structures this crate contains are
-supported via the `serde` feature flag:
+## Features
+- serde: Serialization and deserialization for the few data structures this crate contains are supported via the `serde` feature flag:
 
 ```toml
 [dependencies]
@@ -32,10 +32,9 @@ vcgencmd = {version: "0.3.*", features = ["serde"]}
 ## Quick Start
 
 ```rust
-// Import the various commands you want to use
-use vcgencmd::{measure_temp, get_throttle, interpret_bit_pattern};
+use vcgencmd::{measure_temp, get_throttle, ThrottledStatus};
 
-// You'll also want to import the `Src` enum, which holds all available sources
+// You'll want to import the `Src` enum, which holds all available sources
 // for the different commands
 use vcgendcmd::Src;
 
@@ -52,7 +51,7 @@ let volt_gpu = measure_volts(Src::Volt(VoltSrc::Core)).unwrap();
 let bit_pattern = get_throttle.unwrap();
 
 // Get comprehensive, human readable info about the throttled state of the system
-let throttle_status = interpret_bit_pattern(bit_pattern);
+let throttle_status = ThrottledStatus::new(&bit_pattern);
 
 // If you've enabled the `serde` feature, you can serialize/deserialize the crates datastructures
 use serde_json::to_string;

@@ -25,7 +25,7 @@ pub fn throttled(input: &str) -> Result<isize, ParseIntError> {
         .trim_start_matches("0x")
         .to_owned();
 
-    let bit_pattern= isize::from_str_radix(&parsable, 16)?;
+    let bit_pattern = isize::from_str_radix(&parsable, 16)?;
 
     Ok(bit_pattern)
 }

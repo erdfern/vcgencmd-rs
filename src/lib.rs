@@ -142,6 +142,8 @@ pub fn get_throttled() -> Result<isize, ExecutionError> {
 /// |_ soft temperature reached since last reboot
 /// ```
 ///
+/// > Note: This interpretation might be false/outdated for different versions of vcgencmd...
+///
 /// # Examples
 ///
 /// Basic usage:
@@ -241,6 +243,24 @@ mod tests {
     fn test_resolve_command() {
         assert_eq!("measure_temp", resolve_command(Cmd::MeasureTemp));
         assert_eq!("measure_clock", resolve_command(Cmd::MeasureClock));
+    }
+
+    #[test]
+    fn test_throttled_status_methods() {
+        let throttled_status = ThrottledStatus::new(0b111100000000000001010);
+        assert_eq!(
+            throttled_status,
+            ThrottledStatus {
+                arm_frequency_cap_occurred: true,
+                arm_frequency_capped: false,
+                currently_throttled: true,
+                soft_temp_limit_active: true,
+                soft_temp_limit_occurred: true,
+                throttling_occurred: true,
+                under_voltage: false,
+                under_voltage_occurred: true,
+            }
+        )
     }
 
     #[test]
