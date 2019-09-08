@@ -24,7 +24,9 @@ raspbian_lint:
   tags:
     - raspbian
   script:
+    - rustup default nightly
     - rustup component add clippy
+    - cargo clippy --verbose
   allow_failure: true
 
 raspbian_build:

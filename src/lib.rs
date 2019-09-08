@@ -1,11 +1,12 @@
 //! # Bindings for the RaspberryPi's vcgencmd cli utility
 
+use std::num::{ParseFloatError, ParseIntError};
+
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
+use subprocess::{Exec, PopenError, Redirection};
 
 use bitpat::bitpat;
-use std::num::{ParseFloatError, ParseIntError};
-use subprocess::{Exec, PopenError, Redirection};
 
 mod parsers;
 
@@ -72,6 +73,12 @@ pub struct ThrottledStatus {
     pub under_voltage_occurred: bool,
 }
 
+impl ThrottledStatus {
+    pub fn new(bit_pattern: isize) -> ThrottledStatus {
+        interpret_bit_pattern(bit_pattern)
+    }
+}
+
 /// Execute the given command and capture its std_output without modifying it
 pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
     // "vcgencmd" must be in PATH
@@ -136,6 +143,8 @@ pub fn get_throttled() -> Result<isize, ExecutionError> {
 /// |_ soft temperature reached since last reboot
 /// ```
 ///
+/// > Note: This interpretation might be false/outdated for different versions of vcgencmd...
+///
 /// # Examples
 ///
 /// Basic usage:
@@ -192,26 +201,28 @@ fn resolve_command(cmd: Cmd) -> String {
 }
 
 fn resolve_src(src: Option<Src>) -> Option<String> {
+    // check for None
+    let src = src.as_ref()?;
+
     match src {
-        Some(Src::Clock(ClockSrc::Arm)) => Some("arm".to_owned()),
-        Some(Src::Clock(ClockSrc::Core)) => Some("core".to_owned()),
-        Some(Src::Clock(ClockSrc::Dpi)) => Some("dpi".to_owned()),
-        Some(Src::Clock(ClockSrc::Emmc)) => Some("emmc".to_owned()),
-        Some(Src::Clock(ClockSrc::H264)) => Some("h264".to_owned()),
-        Some(Src::Clock(ClockSrc::Hdmi)) => Some("hdmi".to_owned()),
-        Some(Src::Clock(ClockSrc::Isp)) => Some("isp".to_owned()),
-        Some(Src::Clock(ClockSrc::Pixel)) => Some("pixel".to_owned()),
-        Some(Src::Clock(ClockSrc::Pwm)) => Some("pwm".to_owned()),
-        Some(Src::Clock(ClockSrc::Uart)) => Some("uart".to_owned()),
-        Some(Src::Clock(ClockSrc::V3d)) => Some("v3d".to_owned()),
-        Some(Src::Clock(ClockSrc::Vec)) => Some("vec".to_owned()),
-        Some(Src::Mem(MemSrc::Arm)) => Some("arm".to_owned()),
-        Some(Src::Mem(MemSrc::Gpu)) => Some("gpu".to_owned()),
-        Some(Src::Volt(VoltSrc::Core)) => Some("core".to_owned()),
-        Some(Src::Volt(VoltSrc::SdramC)) => Some("sdram_c".to_owned()),
-        Some(Src::Volt(VoltSrc::SdramI)) => Some("sdram_i".to_owned()),
-        Some(Src::Volt(VoltSrc::SdramP)) => Some("sdram_p".to_owned()),
-        None => None,
+        Src::Clock(ClockSrc::Arm) => Some("arm".to_owned()),
+        Src::Clock(ClockSrc::Core) => Some("core".to_owned()),
+        Src::Clock(ClockSrc::Dpi) => Some("dpi".to_owned()),
+        Src::Clock(ClockSrc::Emmc) => Some("emmc".to_owned()),
+        Src::Clock(ClockSrc::H264) => Some("h264".to_owned()),
+        Src::Clock(ClockSrc::Hdmi) => Some("hdmi".to_owned()),
+        Src::Clock(ClockSrc::Isp) => Some("isp".to_owned()),
+        Src::Clock(ClockSrc::Pixel) => Some("pixel".to_owned()),
+        Src::Clock(ClockSrc::Pwm) => Some("pwm".to_owned()),
+        Src::Clock(ClockSrc::Uart) => Some("uart".to_owned()),
+        Src::Clock(ClockSrc::V3d) => Some("v3d".to_owned()),
+        Src::Clock(ClockSrc::Vec) => Some("vec".to_owned()),
+        Src::Mem(MemSrc::Arm) => Some("arm".to_owned()),
+        Src::Mem(MemSrc::Gpu) => Some("gpu".to_owned()),
+        Src::Volt(VoltSrc::Core) => Some("core".to_owned()),
+        Src::Volt(VoltSrc::SdramC) => Some("sdram_c".to_owned()),
+        Src::Volt(VoltSrc::SdramI) => Some("sdram_i".to_owned()),
+        Src::Volt(VoltSrc::SdramP) => Some("sdram_p".to_owned()),
     }
 }
 
@@ -233,6 +244,24 @@ mod tests {
     fn test_resolve_command() {
         assert_eq!("measure_temp", resolve_command(Cmd::MeasureTemp));
         assert_eq!("measure_clock", resolve_command(Cmd::MeasureClock));
+    }
+
+    #[test]
+    fn test_throttled_status_methods() {
+        let throttled_status = ThrottledStatus::new(0b111100000000000001010);
+        assert_eq!(
+            throttled_status,
+            ThrottledStatus {
+                arm_frequency_cap_occurred: true,
+                arm_frequency_capped: false,
+                currently_throttled: true,
+                soft_temp_limit_active: true,
+                soft_temp_limit_occurred: true,
+                throttling_occurred: true,
+                under_voltage: false,
+                under_voltage_occurred: true,
+            }
+        )
     }
 
     #[test]
