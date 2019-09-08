@@ -4,12 +4,6 @@ fn trim_before_equals(input: &str) -> String {
     input.split('=').collect::<Vec<_>>()[1].trim().to_owned()
 }
 
-pub fn dummy() -> i32 {
-    let something = trim_before_equals("10=10");
-    let value = something.parse().unwrap();
-    value
-}
-
 pub fn temp(input: &str) -> Result<f64, ParseFloatError> {
     let parsable = trim_before_equals(input)
         .trim_end_matches("'C")
