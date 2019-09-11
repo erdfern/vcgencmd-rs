@@ -4,7 +4,8 @@
 [![Documentation](https://docs.rs/vcgencmd/badge.svg)](https://docs.rs/vcgencmd)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-The `vcgencmd` crate provides a way to interact with the vcgencmd utility included in Raspbian in a Rust program.
+The `vcgencmd` crate provides a way to interact with the vcgencmd utility
+included in Raspbian through a Rust program.
 
 As of yet, not all vcgencmd commands have a binding. To see which commands are
 missing, take a look at `PROGRESS.md` in the projects repo. I will only actively
@@ -22,7 +23,7 @@ vcgencmd = "0.3.*"
 ```
 
 ## Features
-- serde: Serialization and deserialization for the few data structures this crate contains are supported via the `serde` feature flag:
+- `serde`: Serialization and de-serialization for the few data structures this crate contains are supported via the `serde` feature flag:
 
 ```toml
 [dependencies]
