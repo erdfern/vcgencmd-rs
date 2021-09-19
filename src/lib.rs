@@ -80,12 +80,29 @@ impl ThrottledStatus {
 }
 
 /// Execute the given command and capture its std_output without modifying it
+#[cfg(not(feature = "no-sudo"))]
 pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
     // "vcgencmd" must be in PATH
     const VCGENCMD_INVOCATION: &str = "vcgencmd";
 
     let vcgencmd_output = Exec::cmd("sudo")
         .arg(VCGENCMD_INVOCATION)
+        .arg(resolve_command(command))
+        .arg(resolve_src(src).unwrap_or_default())
+        .stdout(Redirection::Pipe)
+        .capture()?
+        .stdout_str();
+
+    Ok(vcgencmd_output)
+}
+
+/// Execute the given command and capture its std_output without modifying it
+#[cfg(feature = "no-sudo")]
+pub fn exec_command(command: Cmd, src: Option<Src>) -> Result<String, PopenError> {
+    // "vcgencmd" must be in PATH
+    const VCGENCMD_INVOCATION: &str = "vcgencmd";
+
+    let vcgencmd_output = Exec::cmd(VCGENCMD_INVOCATION)
         .arg(resolve_command(command))
         .arg(resolve_src(src).unwrap_or_default())
         .stdout(Redirection::Pipe)
