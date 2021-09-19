@@ -18,6 +18,7 @@ default-target = "armv7-unknown-linux-gnueabihf"
 
 [features]
 default = []
+no-sudo = []
 
 # Not needed for now, serde feature works implicitly...
 #[namespaced-features]
